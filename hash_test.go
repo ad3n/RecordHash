@@ -42,177 +42,247 @@ type (
 )
 
 func Test_Md5_Hash(t *testing.T) {
-	assert.NotEqual(t, New(MD5, "").Hash(), New(MD5, Simple{
+	var float float32 = 1
+	var hasher Hasher = New(MD5, Simple{
 		Field1: 1,
 		Field2: "test",
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(MD5, "").Hash(), New(MD5, SimpleWithInterface{
+	hasher = New(MD5, SimpleWithInterface{
 		Field1: 1,
 		Field2: true,
-		Field3: map[string]string{
-			"x": "y",
+		Field3: Simple{
+			Field1: 1,
+			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(MD5, "").Hash(), New(MD5, Complex{
+	hasher = New(MD5, Complex{
 		Field1: 1,
 		Field2: "test",
 		Field3: Simple{
 			Field1: 1,
 			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(MD5, "").Hash(), New(MD5, ComplexWithSkip{
+	hasher = New(MD5, ComplexWithSkip{
 		Field1: 1,
 		Field2: "test",
 		Field3: &Simple{
 			Field1: 1,
 			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	var float float32 = 1
-
-	assert.NotEqual(t, New(MD5, "").Hash(), New(MD5, ComplexWithSkipPrimitivePointer{
+	hasher = New(MD5, ComplexWithSkipPrimitivePointer{
 		Field1: &float,
 		Field2: "test",
 		Field3: &Simple{
 			Field1: 1,
 			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 }
 
 func Test_Sha1_Hash(t *testing.T) {
-	assert.NotEqual(t, New(SHA1, "").Hash(), New(SHA1, Simple{
+	var float float32 = 1
+	var hasher Hasher = New(SHA1, Simple{
 		Field1: 1,
 		Field2: "test",
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(SHA1, "").Hash(), New(SHA1, SimpleWithInterface{
+	hasher = New(SHA1, SimpleWithInterface{
 		Field1: 1,
-		Field2: true,
-		Field3: map[string]string{
-			"x": "y",
+		Field2: false,
+		Field3: Simple{
+			Field1: 1,
+			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(SHA1, "").Hash(), New(SHA1, Complex{
+	hasher = New(SHA1, Complex{
 		Field1: 1,
 		Field2: "test",
 		Field3: Simple{
 			Field1: 1,
 			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(SHA1, "").Hash(), New(SHA1, ComplexWithSkip{
+	hasher = New(SHA1, ComplexWithSkip{
 		Field1: 1,
 		Field2: "test",
 		Field3: &Simple{
 			Field1: 1,
 			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
+
+	hasher = New(SHA1, ComplexWithSkipPrimitivePointer{
+		Field1: &float,
+		Field2: "test",
+		Field3: &Simple{
+			Field1: 1,
+			Field2: "test",
+		},
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 }
 
 func Test_Sha256_Hash(t *testing.T) {
-	assert.NotEqual(t, New(SHA256, "").Hash(), New(SHA256, Simple{
+	var float float32 = 1
+	var hasher Hasher = New(SHA256, Simple{
 		Field1: 1,
 		Field2: "test",
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(SHA256, "").Hash(), New(SHA256, SimpleWithInterface{
+	hasher = New(SHA256, SimpleWithInterface{
 		Field1: 1,
 		Field2: true,
-		Field3: map[string]string{
-			"x": "y",
+		Field3: Simple{
+			Field1: 1,
+			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(SHA256, "").Hash(), New(SHA256, Complex{
+	hasher = New(SHA256, Complex{
 		Field1: 1,
 		Field2: "test",
 		Field3: Simple{
 			Field1: 1,
 			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(SHA256, "").Hash(), New(SHA256, ComplexWithSkip{
+	hasher = New(SHA256, ComplexWithSkip{
 		Field1: 1,
 		Field2: "test",
 		Field3: &Simple{
 			Field1: 1,
 			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
+
+	hasher = New(SHA256, ComplexWithSkipPrimitivePointer{
+		Field1: &float,
+		Field2: "test",
+		Field3: &Simple{
+			Field1: 1,
+			Field2: "test",
+		},
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 }
 
 func Test_Sha512_Hash(t *testing.T) {
-	assert.NotEqual(t, New(SHA512, "").Hash(), New(SHA512, Simple{
+	var float float32 = 1
+	var hasher Hasher = New(SHA512, Simple{
 		Field1: 1,
 		Field2: "test",
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(SHA512, "").Hash(), New(SHA512, SimpleWithInterface{
+	hasher = New(SHA512, SimpleWithInterface{
 		Field1: 1,
 		Field2: false,
-		Field3: map[string]string{
-			"x": "y",
+		Field3: Simple{
+			Field1: 1,
+			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(SHA512, "").Hash(), New(SHA512, Complex{
+	hasher = New(SHA512, Complex{
 		Field1: 1,
 		Field2: "test",
 		Field3: Simple{
 			Field1: 1,
 			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 
-	assert.NotEqual(t, New(SHA512, "").Hash(), New(SHA512, ComplexWithSkip{
+	hasher = New(SHA512, ComplexWithSkip{
 		Field1: 1,
 		Field2: "test",
 		Field3: &Simple{
 			Field1: 1,
 			Field2: "test",
 		},
-	}).Hash())
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
+
+	hasher = New(SHA512, ComplexWithSkipPrimitivePointer{
+		Field1: &float,
+		Field2: "test",
+		Field3: &Simple{
+			Field1: 1,
+			Field2: "test",
+		},
+	})
+	assert.True(t, hasher.Compare(hasher.Hash()))
 }
 
 func Test_Alias(t *testing.T) {
-	assert.NotEqual(t, Hash(""), Hash(Simple{
+	var float float32 = 1
+	v1 := Simple{
 		Field1: 1,
 		Field2: "test",
-	}))
+	}
+	assert.True(t, Compare(v1, Hash(v1)))
 
-	assert.NotEqual(t, Hash(""), Hash(SimpleWithInterface{
+	v2 := SimpleWithInterface{
 		Field1: 1,
 		Field2: true,
-		Field3: map[string]string{
-			"x": "y",
+		Field3: Simple{
+			Field1: 1,
+			Field2: "test",
 		},
-	}))
+	}
+	assert.True(t, Compare(v2, Hash(v2)))
 
-	assert.NotEqual(t, Hash(""), Hash(Complex{
+	v3 := Complex{
 		Field1: 1,
 		Field2: "test",
 		Field3: Simple{
 			Field1: 1,
 			Field2: "test",
 		},
-	}))
+	}
+	assert.True(t, Compare(v3, Hash(v3)))
 
-	assert.NotEqual(t, Hash(""), Hash(ComplexWithSkip{
+	v4 := ComplexWithSkip{
 		Field1: 1,
 		Field2: "test",
 		Field3: &Simple{
 			Field1: 1,
 			Field2: "test",
 		},
-	}))
+	}
+	assert.True(t, Compare(v4, Hash(v4)))
+
+	v5 := ComplexWithSkipPrimitivePointer{
+		Field1: &float,
+		Field2: "test",
+		Field3: &Simple{
+			Field1: 1,
+			Field2: "test",
+		},
+	}
+	assert.True(t, Compare(v5, Hash(v5)))
+	assert.True(t, Compare("", Hash("")))
 }

@@ -22,6 +22,7 @@ const (
 type (
 	Hasher interface {
 		Hash() string
+		Compare(hash string) bool
 	}
 
 	Md5Hasher struct {
@@ -60,10 +61,20 @@ func Hash(v interface{}) string {
 	return New("", v).Hash()
 }
 
+func Compare(v interface{}, hash string) bool {
+	return New("", v).Hash() == hash
+}
+
 func (h Md5Hasher) Hash() string {
 	val, _ := json.Marshal(fields(h.v))
 
 	return fmt.Sprintf("%x", md5.Sum(val))
+}
+
+func (h Md5Hasher) Compare(hash string) bool {
+	val, _ := json.Marshal(fields(h.v))
+
+	return hash == fmt.Sprintf("%x", md5.Sum(val))
 }
 
 func (h Sha1Hasher) Hash() string {
@@ -72,16 +83,34 @@ func (h Sha1Hasher) Hash() string {
 	return fmt.Sprintf("%x", sha1.Sum(val))
 }
 
+func (h Sha1Hasher) Compare(hash string) bool {
+	val, _ := json.Marshal(fields(h.v))
+
+	return hash == fmt.Sprintf("%x", sha1.Sum(val))
+}
+
 func (h Sha256Hasher) Hash() string {
 	val, _ := json.Marshal(fields(h.v))
 
 	return fmt.Sprintf("%x", sha256.Sum256(val))
 }
 
+func (h Sha256Hasher) Compare(hash string) bool {
+	val, _ := json.Marshal(fields(h.v))
+
+	return hash == fmt.Sprintf("%x", sha256.Sum256(val))
+}
+
 func (h Sha512Hasher) Hash() string {
 	val, _ := json.Marshal(fields(h.v))
 
 	return fmt.Sprintf("%x", sha512.Sum512(val))
+}
+
+func (h Sha512Hasher) Compare(hash string) bool {
+	val, _ := json.Marshal(fields(h.v))
+
+	return hash == fmt.Sprintf("%x", sha512.Sum512(val))
 }
 
 func fields(v interface{}) map[string]interface{} {
