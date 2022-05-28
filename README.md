@@ -30,4 +30,8 @@ hasher := recordhash.New(recordhash.MD5, user)
 user.Hash = hasher.Hash()
 
 user.Hash = recordhash.Hash(user)
+
+recordhash.Compare(user.Hash)
 ```
+
+More example? See [test](hash_test.go)
