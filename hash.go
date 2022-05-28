@@ -86,20 +86,63 @@ func (h Sha512Hasher) Hash() string {
 
 func fields(v interface{}) map[string]interface{} {
 	result := map[string]interface{}{}
-	ref := reflect.TypeOf(v)
-	if ref.Kind() != reflect.Struct {
+	reflectTye := reflect.TypeOf(v)
+	reflectValue := reflect.ValueOf(v)
+	if reflectTye.Kind() != reflect.Struct {
 		return result
 	}
 
-	for i := 0; i < ref.NumField(); i++ {
-		field := ref.Field(i)
+	for i := 0; i < reflectTye.NumField(); i++ {
+		field := reflectTye.Field(i)
 		tag := field.Tag.Get(tagName)
 		if tag == "" || tag == "-" {
 			continue
 		}
 
-		result[tag] = reflect.ValueOf(field).Interface()
+		if field.Type.Kind() == reflect.Pointer {
+			real := reflectValue.Field(i).Elem()
+			if real.Kind() == reflect.Struct {
+				result[tag] = fields(real.Interface())
+
+				continue
+			}
+		}
+
+		if field.Type.Kind() == reflect.Struct {
+			result[tag] = fields(reflectValue.Field(i).Interface())
+
+			continue
+		}
+
+		result[tag] = value(reflectValue.Field(i))
 	}
 
 	return result
+}
+
+func value(val reflect.Value) string {
+	if val.Kind() == reflect.Pointer {
+		val = val.Elem()
+	}
+
+	switch val.Type().Kind() {
+	case reflect.Bool:
+		if val.Bool() {
+			return "true"
+		} else {
+			return "false"
+		}
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return fmt.Sprintf("%d", val.Int())
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return fmt.Sprintf("%d", val.Uint())
+	case reflect.String:
+		return val.String()
+	case reflect.Float32, reflect.Float64:
+		return fmt.Sprintf("%f", val.Float())
+	case reflect.Complex64, reflect.Complex128:
+		return fmt.Sprintf("%f", val.Complex())
+	default:
+		return ""
+	}
 }
